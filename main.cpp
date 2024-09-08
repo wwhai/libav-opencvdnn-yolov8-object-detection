@@ -91,6 +91,8 @@ int main(int argc, char** argv) {
     const std::string modelPath = "C:/Users/wangwenhai/workspace/libav-opencvdnn-yolov8-object-detection/yolov8n.onnx";
     cv::Mat frame = cv::imread("C:/Users/wangwenhai/workspace/libav-opencvdnn-yolov8-object-detection/1.png");
     cv::dnn::Net net = cv::dnn::readNetFromONNX(modelPath);
+    net.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+    net.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
 
     // 准备输入
     cv::Mat blob;
@@ -104,7 +106,7 @@ int main(int argc, char** argv) {
     net.forward(outs, net.getUnconnectedOutLayersNames());
 
     // 后处理，提取检测结果
-    postprocess(frame, outs, 0.5, 0.4);
+    postprocess(frame, outs, 0.25, 0.5);
 
     // 显示结果
     cv::imshow("YOLOv8 Detection", frame);
